@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examens Médicaux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .specialty-card:hover .exams-list {
+            display: block;
+        }
+        .exams-list {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 alt="Background" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-overlay"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center min-h-screen py-12 px-4">
+            <a href="index.html" class="absolute top-6 left-6 text-white hover:text-gray-300">
+                <i class="fas fa-arrow-left mr-2"></i> Retour
+            </a>
+            
+            <div class="text-center text-white mb-12">
+                <h1 class="text-4xl font-bold mb-4">Examens Médicaux</h1>
+                <p class="text-xl">Trouvez l'examen dont vous avez besoin</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="w-full max-w-2xl mb-12">
+                <div class="relative">
+                    <input type="text" 
+                           id="searchInput"
+                           placeholder="Rechercher un examen (ex: ECG, échographie...)" 
+                           class="w-full px-6 py-4 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button onclick="searchExam()" 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Specialties Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+                <!-- Cards will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Charger les données depuis l'API
+        async function loadExamens() {
+            try {
+                const response = await fetch('/api/examens.php');
+                const specialties = await response.json();
+                displaySpecialties(specialties);
+            } catch (error) {
+                console.error('Erreur lors du chargement des examens:', error);
+                alert('Erreur lors du chargement des examens. Veuillez réessayer plus tard.');
+            }
+        }
+
+        // Afficher les spécialités et leurs examens
+        function displaySpecialties(specialties) {
+            const container = document.querySelector('.grid');
+            container.innerHTML = ''; // Vider le conteneur
+
+            specialties.forEach(specialty => {
+                const card = `
+                    <div class="specialty-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-2xl">
+                        <div class="p-6">
+                            <div class="text-4xl text-${specialty.couleur}-600 mb-4">
+                                <i class="fas ${specialty.icon}"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">${specialty.nom}</h3>
+                            
+                            <div class="exams-list bg-gray-50 rounded-lg p-4 mt-4">
+                                <h4 class="font-semibold mb-4">Examens disponibles :</h4>
+                                ${specialty.examens.map(exam => `
+                                    <div class="mb-6 pb-4 border-b border-gray-200 last:border-0">
+                                        <h5 class="font-semibold text-lg mb-2">${exam.nom}</h5>
+                                        <div class="space-y-2 text-sm">
+                                            <p class="text-gray-700"><i class="fas fa-hospital-alt w-6"></i> Disponible à :</p>
+                                            <ul class="ml-6 list-disc text-gray-600">
+                                                ${exam.etablissements.map(place => `<li>${place}</li>`).join('')}
+                                            </ul>
+                                            <p class="text-gray-700"><i class="fas fa-tag w-6"></i> Tarif : ${exam.prix_min} - ${exam.prix_max} FCFA</p>
+                                            <p class="text-gray-700"><i class="fas fa-info-circle w-6"></i> Conseils :</p>
+                                            <p class="ml-6 text-gray-600">${exam.conseils}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Recherche d'examens
+        async function searchExam() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (!searchTerm) {
+                loadExamens(); // Recharger tous les examens si la recherche est vide
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/examens.php?search=${encodeURIComponent(searchTerm)}`);
+                const results = await response.json();
+                
+                if (results.length === 0) {
+                    alert('Aucun examen trouvé pour votre recherche. Veuillez réessayer avec un autre terme.');
+                    return;
+                }
+
+                displaySpecialties(results);
+
+                // Mettre en évidence les résultats trouvés
+                const examElements = document.querySelectorAll('.specialty-card');
+                examElements.forEach(el => {
+                    if (el.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                        el.querySelector('.exams-list').style.display = 'block';
+                        setTimeout(() => {
+                            el.classList.add('ring-2', 'ring-blue-500');
+                            setTimeout(() => el.classList.remove('ring-2', 'ring-blue-500'), 2000);
+                        }, 500);
+                    }
+                });
+            } catch (error) {
+                console.error('Erreur lors de la recherche:', error);
+                alert('Erreur lors de la recherche. Veuillez réessayer plus tard.');
+            }
+        }
+
+        // Ajouter la recherche sur la touche Entrée
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchExam();
+            }
+        });
+
+        // Charger les examens au chargement de la page
+        document.addEventListener('DOMContentLoaded', loadExamens);
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Médecins</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .doctor-card:hover .doctor-details {
+            display: block;
+        }
+        .doctor-details {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 alt="Background" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-overlay"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center min-h-screen py-12 px-4">
+            <a href="#" onclick="goBack()" class="absolute top-6 left-6 text-white hover:text-gray-300">
+                <i class="fas fa-arrow-left mr-2"></i> Retour
+            </a>
+            
+            <h1 id="pageTitle" class="text-4xl font-bold mb-4 text-center text-white"></h1>
+            <p class="text-xl mb-12 text-center text-white">Choisissez votre médecin pour prendre rendez-vous</p>
+            
+            <div id="doctorsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+                <!-- Doctors will be inserted here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const zone = urlParams.get('zone');
+        const type = urlParams.get('type');
+
+        // Doctor data
+        const doctors = {
+            generaliste: [
+                {
+                    name: "Dr. Marie Diop",
+                    specialty: "Médecin Généraliste",
+                    location: "Clinique Médicale du Centre",
+                    hours: "8h00 - 17h00",
+                    image: "https://images.pexels.com/photos/4173239/pexels-photo-4173239.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Dr. Amadou Sow",
+                    specialty: "Médecin Généraliste",
+                    location: "Cabinet Médical Principal",
+                    hours: "9h00 - 18h00",
+                    image: "https://images.pexels.com/photos/4225880/pexels-photo-4225880.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                }
+            ],
+            specialiste: [
+                {
+                    name: "Dr. Fatou Ndiaye",
+                    specialty: "Cardiologue",
+                    location: "Centre Cardiologique",
+                    hours: "8h30 - 16h30",
+                    image: "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Dr. Omar Fall",
+                    specialty: "Pédiatre",
+                    location: "Clinique Pédiatrique",
+                    hours: "9h00 - 17h00",
+                    image: "https://images.pexels.com/photos/5407206/pexels-photo-5407206.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Dr. Aïssatou Ba",
+                    specialty: "Dermatologue",
+                    location: "Centre Dermatologique",
+                    hours: "10h00 - 18h00",
+                    image: "https://images.pexels.com/photos/5214958/pexels-photo-5214958.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                }
+            ]
+        };
+
+        function goBack() {
+            window.location.href = `consultation-type.html?zone=${zone}`;
+        }
+
+        // Update page title
+        document.getElementById('pageTitle').textContent = 
+            `Médecins ${type === 'generaliste' ? 'Généralistes' : 'Spécialistes'} - ${zone.charAt(0).toUpperCase() + zone.slice(1)}`;
+
+        // Create doctor cards
+        const doctorsList = document.getElementById('doctorsList');
+        const selectedDoctors = doctors[type];
+
+        selectedDoctors.forEach(doctor => {
+            const doctorCard = `
+                <div class="doctor-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-2xl">
+                    <img src="${doctor.image}" alt="${doctor.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">${doctor.name}</h3>
+                        <p class="text-gray-600 mb-4">${doctor.specialty}</p>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-map-marker-alt w-6"></i>
+                                <span>${doctor.location}</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-clock w-6"></i>
+                                <span>${doctor.hours}</span>
+                            </div>
+                            <button onclick="alert('Fonctionnalité de prise de rendez-vous en développement')" 
+                                    class="w-full bg-blue-600 text-white rounded-lg px-4 py-2 transition duration-300 hover:bg-blue-700">
+                                Prendre Rendez-vous
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            doctorsList.innerHTML += doctorCard;
+        });
+    </script>
+</body>
+</html>

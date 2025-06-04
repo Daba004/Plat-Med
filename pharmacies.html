@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Pharmacies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/139398/thermometer-headache-pain-pills-139398.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 alt="Background" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-overlay"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center min-h-screen py-12 px-4">
+            <a href="#" onclick="goBack()" class="absolute top-6 left-6 text-white hover:text-gray-300">
+                <i class="fas fa-arrow-left mr-2"></i> Retour
+            </a>
+            
+            <h1 id="pageTitle" class="text-4xl font-bold mb-4 text-center text-white"></h1>
+            <p class="text-xl mb-12 text-center text-white">Trouvez les pharmacies ouvertes près de chez vous</p>
+            
+            <div id="pharmaciesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+                <!-- Pharmacies will be inserted here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const zone = urlParams.get('zone');
+
+        // Pharmacy data
+        const pharmacies = {
+            mermoz: [
+                {
+                    name: "Pharmacie Centrale Mermoz",
+                    address: "Avenue Cheikh Anta Diop",
+                    hours: "24h/24",
+                    phone: "+221 33 xxx xx xx",
+                    image: "https://images.pexels.com/photos/4386464/pexels-photo-4386464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Pharmacie du Soleil",
+                    address: "Rue des Écoles",
+                    hours: "8h00 - 23h00",
+                    phone: "+221 33 xxx xx xx",
+                    image: "https://images.pexels.com/photos/4386467/pexels-photo-4386467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Grande Pharmacie Mermoz",
+                    address: "Boulevard Maritime",
+                    hours: "7h00 - 00h00",
+                    phone: "+221 33 xxx xx xx",
+                    image: "https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                }
+            ],
+            fass: [
+                {
+                    name: "Pharmacie Fass Delorme",
+                    address: "Avenue Bourguiba",
+                    hours: "24h/24",
+                    phone: "+221 33 xxx xx xx",
+                    image: "https://images.pexels.com/photos/4386464/pexels-photo-4386464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Pharmacie Moderne Fass",
+                    address: "Rue 13 x 6",
+                    hours: "8h00 - 23h00",
+                    phone: "+221 33 xxx xx xx",
+                    image: "https://images.pexels.com/photos/4386467/pexels-photo-4386467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                },
+                {
+                    name: "Pharmacie de la Paix",
+                    address: "Avenue Lamine Guèye",
+                    hours: "7h00 - 00h00",
+                    phone: "+221 33 xxx xx xx",
+                    image: "https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                }
+            ]
+        };
+
+        function goBack() {
+            window.location.href = `services.html?zone=${zone}`;
+        }
+
+        // Update page title
+        document.getElementById('pageTitle').textContent = 
+            `Pharmacies - ${zone.charAt(0).toUpperCase() + zone.slice(1)}`;
+
+        // Create pharmacy cards
+        const pharmaciesList = document.getElementById('pharmaciesList');
+        const selectedPharmacies = pharmacies[zone];
+
+        selectedPharmacies.forEach(pharmacy => {
+            const pharmacyCard = `
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-2xl">
+                    <img src="${pharmacy.image}" alt="${pharmacy.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">${pharmacy.name}</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-map-marker-alt w-6"></i>
+                                <span>${pharmacy.address}</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-clock w-6"></i>
+                                <span>${pharmacy.hours}</span>
+                            </div>
+                            <div class="flex items-center text-gray-700">
+                                <i class="fas fa-phone w-6"></i>
+                                <span>${pharmacy.phone}</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="window.open('tel:${pharmacy.phone}')" 
+                                        class="flex-1 bg-green-600 text-white rounded-lg px-4 py-2 transition duration-300 hover:bg-green-700">
+                                    <i class="fas fa-phone mr-2"></i> Appeler
+                                </button>
+                                <button onclick="window.open('https://maps.google.com?q=${pharmacy.address}')" 
+                                        class="flex-1 bg-blue-600 text-white rounded-lg px-4 py-2 transition duration-300 hover:bg-blue-700">
+                                    <i class="fas fa-map-marker-alt mr-2"></i> Itinéraire
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            pharmaciesList.innerHTML += pharmacyCard;
+        });
+    </script>
+</body>
+</html>

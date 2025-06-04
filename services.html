@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Médicaux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/247786/pexels-photo-247786.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 alt="Background" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-overlay"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center min-h-screen text-white px-4">
+            <a href="zone.html" class="absolute top-6 left-6 text-white hover:text-gray-300">
+                <i class="fas fa-arrow-left mr-2"></i> Retour
+            </a>
+            
+            <h1 id="zoneTitle" class="text-4xl font-bold mb-4 text-center">Services à <span class="capitalize"></span></h1>
+            <p class="text-xl mb-12 text-center">Choisissez le type de service dont vous avez besoin</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+                <!-- Consultations -->
+                <button onclick="redirectToService('consultations')" 
+                        class="bg-white text-gray-800 rounded-xl p-8 transition duration-300 hover:transform hover:scale-105 hover:shadow-lg">
+                    <div class="text-4xl mb-4 text-blue-600">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4">Consultations</h2>
+                    <p class="text-gray-600">Prenez rendez-vous avec nos médecins généralistes et spécialistes</p>
+                </button>
+
+                <!-- Pharmacies -->
+                <button onclick="redirectToService('pharmacies')" 
+                        class="bg-white text-gray-800 rounded-xl p-8 transition duration-300 hover:transform hover:scale-105 hover:shadow-lg">
+                    <div class="text-4xl mb-4 text-green-600">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4">Pharmacies</h2>
+                    <p class="text-gray-600">Trouvez les pharmacies ouvertes dans votre zone</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get zone from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const zone = urlParams.get('zone');
+        
+        // Update title with zone name
+        if (zone) {
+            document.querySelector('#zoneTitle span').textContent = zone;
+        }
+
+        // Redirect to appropriate service page
+        function redirectToService(service) {
+            if (service === 'consultations') {
+                window.location.href = `consultation-type.html?zone=${zone}`;
+            } else {
+                window.location.href = `pharmacies.html?zone=${zone}`;
+            }
+        }
+    </script>
+</body>
+</html>

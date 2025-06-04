@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urgences Médicales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .specialty-card:hover .services-list {
+            display: block;
+        }
+        .services-list {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/247786/pexels-photo-247786.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 alt="Background" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-overlay"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center min-h-screen py-12 px-4">
+            <a href="index.html" class="absolute top-6 left-6 text-white hover:text-gray-300">
+                <i class="fas fa-arrow-left mr-2"></i> Retour
+            </a>
+            
+            <div class="text-center text-white mb-12">
+                <h1 class="text-4xl font-bold mb-4">Urgences Médicales</h1>
+                <p class="text-xl">Sélectionnez une spécialité pour voir les services disponibles</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
+                <!-- Emergency specialties will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Emergency specialties data
+        const specialties = [
+            {
+                name: "Cardiologie",
+                icon: "fa-heart",
+                color: "red",
+                services: [
+                    "Hôpital Principal - Service Cardiologie (24/7)",
+                    "Clinique du Cœur - Unité d'Urgence",
+                    "Centre Cardio de Dakar"
+                ]
+            },
+            {
+                name: "Pédiatrie",
+                icon: "fa-child",
+                color: "blue",
+                services: [
+                    "Hôpital des Enfants - Urgences",
+                    "Clinique Pédiatrique de Mermoz",
+                    "Centre de Santé Infantile"
+                ]
+            },
+            {
+                name: "Traumatologie",
+                icon: "fa-bone",
+                color: "green",
+                services: [
+                    "Centre de Traumatologie",
+                    "Hôpital Général - Service Trauma",
+                    "Clinique des Accidents"
+                ]
+            },
+            {
+                name: "Neurologie",
+                icon: "fa-brain",
+                color: "purple",
+                services: [
+                    "Centre Neurologique d'Urgence",
+                    "Hôpital Principal - Service Neuro",
+                    "Clinique du Cerveau"
+                ]
+            },
+            {
+                name: "Gynécologie",
+                icon: "fa-venus",
+                color: "pink",
+                services: [
+                    "Maternité Principale",
+                    "Centre de Santé de la Femme",
+                    "Clinique Gynécologique"
+                ]
+            },
+            {
+                name: "Urgences Générales",
+                icon: "fa-hospital",
+                color: "orange",
+                services: [
+                    "Hôpital Principal - Urgences",
+                    "SOS Médecins 24/7",
+                    "Centre d'Urgence de Dakar"
+                ]
+            }
+        ];
+
+        // Create specialty cards
+        const container = document.querySelector('.grid');
+        
+        specialties.forEach(specialty => {
+            const card = `
+                <div class="specialty-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-2xl">
+                    <div class="p-6">
+                        <div class="text-4xl text-${specialty.color}-600 mb-4">
+                            <i class="fas ${specialty.icon}"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">${specialty.name}</h3>
+                        
+                        <div class="services-list bg-gray-50 rounded-lg p-4 mt-4">
+                            <h4 class="font-semibold mb-2">Services disponibles :</h4>
+                            <ul class="space-y-2">
+                                ${specialty.services.map(service => `
+                                    <li class="flex items-center text-gray-700">
+                                        <i class="fas fa-hospital-alt w-6"></i>
+                                        <span>${service}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                            <button onclick="window.open('tel:15')" 
+                                    class="w-full mt-4 bg-red-600 text-white rounded-lg px-4 py-2 transition duration-300 hover:bg-red-700">
+                                <i class="fas fa-phone-alt mr-2"></i> Appeler SAMU (15)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    </script>
+</body>
+</html>

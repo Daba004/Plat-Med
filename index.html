@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hôpital - Accueil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 alt="Background" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-overlay"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center justify-center min-h-screen text-white px-4">
+            <h1 class="text-5xl font-bold mb-8 text-center">Bienvenue à votre service de santé</h1>
+            <p class="text-xl mb-12 text-center">Nous sommes là pour prendre soin de vous</p>
+            
+            <!-- Selection Buttons -->
+            <div class="space-y-6 w-full max-w-md">
+                <!-- Zone de résidence -->
+                <button onclick="window.location.href='zone.html'" 
+                        class="w-full bg-white text-gray-800 rounded-lg px-6 py-4 text-lg font-semibold transition duration-300 hover:bg-gray-100 flex items-center justify-between">
+                    <span>Sélectionner votre zone de résidence</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <!-- Examens médicaux -->
+                <button onclick="window.location.href='examens.html'"
+                        class="w-full bg-blue-600 text-white rounded-lg px-6 py-4 text-lg font-semibold transition duration-300 hover:bg-blue-700 flex items-center justify-between">
+                    <span>Examens médicaux</span>
+                    <i class="fas fa-microscope"></i>
+                </button>
+
+                <!-- Urgence -->
+                <button onclick="window.location.href='urgence.html'"
+                        class="w-full bg-red-600 text-white rounded-lg px-6 py-4 text-lg font-semibold transition duration-300 hover:bg-red-700 flex items-center justify-between">
+                    <span>Urgence</span>
+                    <i class="fas fa-ambulance"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
